@@ -21,7 +21,7 @@ GET http://localhost:3000/movies/10/
 
 ###
 
-PUT http://localhost:3000//movies/12/
+PUT http://localhost:3000/movies/12/
 Content-Type: application/json
 
 {

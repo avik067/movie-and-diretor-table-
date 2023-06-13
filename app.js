@@ -75,25 +75,24 @@ app.get("/movies/:movieId/", async (request, response) => {
 
 // PUT new data
 
-app.put("/players/:playerId/", async (request, response) => {
-  const { playerId } = request.params;
-  const playerDetails = request.body;
-  const { playerName, jerseyNumber, role } = playerDetails;
+app.put("/movies/:movieId/", async (request, response) => {
+  const { movieId } = request.params;
+  const movieDetails = request.body;
+  const { directorId, movieName, leadActor } = movieDetails;
 
-  const addPlayer = `
+  const addMovie = `
     UPDATE
-        cricket_team
+        movie
     SET
-      player_name =  '${playerName}',
-      jersey_number = '${jerseyNumber}',
-      role = '${role}'
+      director_id =  '${directorId}',
+      movie_name = '${movieName}',
+      lead_actor = '${leadActor}'
     WHERE
-      player_id = '${playerId}'
+      movie_id = '${movieId}'
     ;
    `;
-  const responseDb = await db.run(addPlayer);
-  //const newplayerId = responseDb.lastID;
-  //response.send({ playerId: newplayerId });
+  const responseDb = await db.run(addMovie);
+
   response.send("Player Details Updated");
 });
 
