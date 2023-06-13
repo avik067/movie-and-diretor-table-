@@ -132,13 +132,13 @@ app.get("/directors/", async (request, response) => {
 
 app.get("/directors/:directorId/movies/", async (request, response) => {
   const { directorId } = request.params;
-  const getPlayersSqlcode = `
+  const getmovie = `
     SELECT movie_name
     FROM  movie
     WHERE director_id = ${directorId}
     ORDER BY movie_id;
    `;
-  const finalOutputArray = await db.all(getPlayersSqlcode);
+  const finalOutputArray = await db.all(getmovie);
   let arr = [];
   for (let i of finalOutputArray) {
     arr.push(convertDbObjectToResponseObject(i));
