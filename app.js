@@ -93,24 +93,58 @@ app.put("/movies/:movieId/", async (request, response) => {
    `;
   const responseDb = await db.run(addMovie);
 
-  response.send("Player Details Updated");
+  response.send("Movie Details Updated");
 });
 
-// //DELETE player on playerid
+//DELETE player on playerid
 
-// app.delete("/players/:playerId/", async (request, response) => {
-//   const { playerId } = request.params;
+app.delete("/movies/:movieId/", async (request, response) => {
+  const { movieId } = request.params;
 
-//   const deletePlayer = `
-//     DELETE FROM
-//         cricket_team
-//     WHERE
-//       player_id = '${playerId}'
-//     ;
-//    `;
-//   const responseDb = await db.run(deletePlayer);
-//   response.send("Player Removed");
-// });
+  const deletePlayer = `
+    DELETE FROM
+        movie
+    WHERE
+      movie_id = '${movieId}'
+    ;
+   `;
+  const responseDb = await db.run(deletePlayer);
+  response.send("Movie Removed");
+});
+
+// GET  data of diretor on directorID
+
+app.get("/directors/", async (request, response) => {
+  const getDirector = `
+    SELECT *
+    FROM  director
+    ORDER BY director_id;
+   `;
+  const finalOutputArray = await db.all(getDirector);
+  let arr = [];
+  for (let i of finalOutputArray) {
+    arr.push(convertDbObjectToResponseObject_2(i));
+  }
+  response.send(arr);
+});
+
+// GET movies on Direcors name
+
+app.get("/directors/:directorId/movies/", async (request, response) => {
+  const { directorId } = request.params;
+  const getPlayersSqlcode = `
+    SELECT movie_name
+    FROM  movie
+    WHERE director_id = ${directorId}
+    ORDER BY movie_id;
+   `;
+  const finalOutputArray = await db.all(getPlayersSqlcode);
+  let arr = [];
+  for (let i of finalOutputArray) {
+    arr.push(convertDbObjectToResponseObject(i));
+  }
+  response.send(arr);
+});
 
 const convertDbObjectToResponseObject = (dbObject) => {
   return {
@@ -127,5 +161,11 @@ const convertDbObjectToResponseObject_1 = (dbObject) => {
   };
 };
 
+const convertDbObjectToResponseObject_2 = (dbObject) => {
+  return {
+    directorId: dbObject.director_id,
+    directorName: dbObject.director_name,
+  };
+};
 module.exports = listenAndinitializeDb;
 module.exports = app;
